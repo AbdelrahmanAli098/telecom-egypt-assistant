@@ -10,4 +10,4 @@ COPY ui.py .
 
 EXPOSE 8501
 
-CMD ["streamlit", "run", "ui.py", "--server.address=0.0.0.0", "--server.port=8501"]
+CMD ["streamlit", "run", "streamlit/ui.py", "--server.address=0.0.0.0", "--server.port=8501"]

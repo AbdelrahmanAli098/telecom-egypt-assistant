@@ -115,7 +115,7 @@ Two processes, run simultaneously in separate terminals:
 uvicorn app.main:app
 
 # Terminal 2 — frontend
-streamlit run ui.py
+streamlit run streamlit/ui.py
 ```
 Open the Streamlit URL it prints (default `http://localhost:8501`).
 

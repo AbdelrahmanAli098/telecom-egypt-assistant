@@ -1,8 +1,7 @@
 # app/Dockerfile
 FROM python:3.11-slim
 
-# ffmpeg: required by faster-whisper/av for audio decoding
-# libgomp1: required by ctranslate2 (faster-whisper's backend)
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libgomp1 \
