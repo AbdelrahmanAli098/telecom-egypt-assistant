@@ -121,6 +121,45 @@ Open the Streamlit URL it prints (default `http://localhost:8501`).
 
 ---
 
+### 3.8 Docker Compose
+
+This repository includes a `docker-compose.yml` and Dockerfiles to run the full stack locally (Qdrant, Ollama, backend, and Streamlit UI).
+
+- **Ports:** Qdrant `:6333`, Ollama `:11434`, backend `:8000`, UI `:8501`.
+- **Volumes:** persistent volumes include `qdrant_data`, `ollama_data`, and `whisper_cache` (see `docker-compose.yml`).
+- **Notes:** the backend image copies local Piper/TTS artifacts from `voice/piper` and `voice/voices` at build time — make sure those paths exist if you need TTS. Ollama and the backend request GPU devices when available; configure the NVIDIA container runtime on the host to enable GPU acceleration.
+
+Quick start:
+
+```bash
+# Build and start all services (first run may pull models and take time)
+docker compose up --build
+
+# Run in background
+docker compose up --build -d
+```
+
+Pre-pull Ollama models (optional, speeds first startup):
+
+```bash
+docker compose run --rm ollama-init
+```
+
+Run only selected services:
+
+```bash
+# Backend + Qdrant only
+docker compose up --build backend qdrant
+```
+
+Troubleshooting tips:
+
+- Check logs: `docker compose logs <service>` (e.g. `docker compose logs ollama`).
+- If Ollama fails to load models, ensure `ollama` service has network access and sufficient resources.
+- If Piper/TTS isn't working, verify the local `voice/piper` binary and `voice/voices` are present and were included during the backend image build (see [docker/app.Dockerfile](docker/app.Dockerfile)).
+
+
+
 ## 4. Features
 
 - **Text chat** with source citations (`/chat`)
