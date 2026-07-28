@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+voice/piper.exe 
+voice/piper_phonemize.dll 
+voice/onnxruntime.dll 
+voice/onnxruntime_providers_shared.dll 
+voice/libtashkeel_model.ort 
+voice/espeak-ng.dll 
+voice/pkgconfig 
+voice/espeak-ng-data 
+voice/output
+debug.html
