@@ -1,4 +1,5 @@
 import base64
+import os
 import uuid
 
 import requests
@@ -6,7 +7,7 @@ import streamlit as st
 from streamlit_mic_recorder import mic_recorder
 
 # Config
-API_BASE_URL = "http://127.0.0.1:8000"
+API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(page_title="Telecom Egypt Assistant", page_icon="📞", layout="centered")
 

@@ -1,4 +1,5 @@
 import hashlib
+import os
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct, Filter, FieldCondition, MatchValue
@@ -16,8 +17,8 @@ def _make_point_id(chunk: dict) -> str:
 
 
 class QdrantStorage:
-    def __init__(self, url="http://localhost:6333", collection="TE.Eg", dim=1024):
-
+    def __init__(self, url=None, collection="TE.Eg", dim=1024):
+        url = url or os.getenv("QDRANT_URL", "http://localhost:6333")
         self.client = QdrantClient(url=url, timeout=30)
         self.collection = collection
         if not self.client.collection_exists(collection_name=collection):
