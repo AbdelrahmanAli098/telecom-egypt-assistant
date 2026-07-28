@@ -13,3 +13,5 @@ requests>=2.34.2
 uvicorn>=0.51.0
 llama_index>=0.14.23
 torch>=2.7.1
+streamlit>=1.60.0
+streamlit-mic-recorder

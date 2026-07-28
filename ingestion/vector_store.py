@@ -1,22 +1,30 @@
 import hashlib
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct, Filter, FieldCondition, MatchValue
 
+
 def _make_point_id(chunk: dict) -> str:
     url = (chunk.get("url") or chunk.get("session_id") or "").strip()
-    chunk_index = chunk.get("chunk_index", 0)
     content_type = chunk.get("content_type", "")
-    key = f"{url}|{chunk_index}|{content_type}"
+    chunk_index = chunk.get("chunk_index", 0)
+    text = chunk.get("chunk_text", "")
+
+    text_hash = hashlib.md5(text.encode("utf-8")).hexdigest()[:12]
+    key = f"{url}|{content_type}|{chunk_index}|{text_hash}"
     return hashlib.md5(key.encode("utf-8")).hexdigest()
+
 
 class QdrantStorage:
     def __init__(self, url="http://localhost:6333", collection="TE.Eg", dim=1024):
+
         self.client = QdrantClient(url=url, timeout=30)
         self.collection = collection
         if not self.client.collection_exists(collection_name=collection):
             self.client.create_collection(
                 collection_name=collection,
-                vectors_config=VectorParams(size=dim, distance=Distance.COSINE))
+                vectors_config=VectorParams(size=dim, distance=Distance.COSINE)
+            )
 
     def upsert_chunks(self, chunks: list[dict]):
         points = []
@@ -41,14 +49,19 @@ class QdrantStorage:
                 ]
             )
         else:
-            query_filter = Filter(must_not=[FieldCondition(key="source_type", match=MatchValue(value="user_upload"))])
+            query_filter = Filter(
+                must_not=[
+                    FieldCondition(key="source_type", match=MatchValue(value="user_upload"))
+                ]
+            )
 
         results = self.client.query_points(
             collection_name=self.collection,
             query=query_vector,
             query_filter=query_filter,
             with_payload=True,
-            limit=top_k)
+            limit=top_k
+        )
 
         contexts = []
         sources = set()

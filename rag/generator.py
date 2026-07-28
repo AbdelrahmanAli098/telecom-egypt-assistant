@@ -11,12 +11,12 @@ embedding = OllamaEmbeddings(
 )
 client = ChatOllama(
     model="qwen2.5:7b",
-    temperature=0,
+    temperature=0.1,
     base_url=OLLAMA_BASE_URL,
 )
 store = QdrantStorage()
 
-def search(question: str, top_k: int = 5, session_id: str | None = None) -> dict:
+def search(question: str, top_k: int = 10, session_id: str | None = None) -> dict:
     query_vec = embedding.embed_query(question)
     found = store.search(query_vec, top_k, session_id=session_id)
     return {"contexts": found["contexts"], "sources": found["sources"]}
